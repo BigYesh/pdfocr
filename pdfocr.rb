@@ -164,7 +164,7 @@ if not outfile or outfile == ""
   exit
 end
 
-if outfile[-3..-1] != "pdf"
+if outfile[-3..-1].downcase != "pdf"
   puts "Output PDF file should have a PDF extension"
   exit
 end
