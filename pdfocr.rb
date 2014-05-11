@@ -138,7 +138,7 @@ if not infile or infile == ""
   exit
 end
 
-if infile[-3..-1] != "pdf"
+if infile[-3..-1].downcase != "pdf"
   puts "Input PDF file #{infile} should have a PDF extension"
   exit
 end
@@ -164,7 +164,7 @@ if not outfile or outfile == ""
   exit
 end
 
-if outfile[-3..-1].downcase != "pdf"
+if outfile[-3..-1] != "pdf"
   puts "Output PDF file should have a PDF extension"
   exit
 end
@@ -333,13 +333,13 @@ Dir.chdir(tmp+"/") {
   if usecuneiform
     sh "cuneiform", "-l", language, "-f", "hocr", "-o", basefn+'.hocr', basefn+'.ppm'
   elsif usetesseract
-    sh "tesseract", "-l", language, basefn+'.ppm', basefn+'.hocr', "hocr"
-    sh "mv", basefn+'.hocr.html', basefn+'.hocr'
+    sh "tesseract", "-l", language, basefn+'.ppm', basefn, "hocr" 
+    #hocr option now adds suffic automatically and does not generate a html file any more
   else
     sh "ocroscript recognize #{shell_escape(basefn)}.ppm > #{shell_escape(basefn)}.hocr"
   end
   if not File.file?(basefn+'.hocr')
-    puts "Error while running OCR on page #{i}"
+    puts "Error while running OCR on page #{i} - could not find #{basefn}.hocr"
     next
   end
   puts "Embedding text into PDF for page #{i}"
